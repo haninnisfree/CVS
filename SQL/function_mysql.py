@@ -31,11 +31,9 @@ def query_with_fetchall(conn):
         print(row)
     return rows
 
-def insert_book(conn, title, isbn):
-    query = "INSERT INTO products(name, itemcode) " \  # 테이블명 및 컬럼명 변경
-            "VALUES(%s,%s)"
-
-    args = (title, isbn)
+def insert_product(conn, itemcode, name, price, quantity, date):
+    query = "INSERT INTO products (itemcode, name, price, quantity, date) VALUES (%s, %s, %s, %s, %s)"
+    args = (itemcode, name, price, quantity, date)
     product_id = None
     with conn.cursor() as cursor:
         cursor.execute(query, args)
@@ -43,11 +41,11 @@ def insert_book(conn, title, isbn):
     conn.commit()
     return product_id
 
-def update_book(conn, book_id, title):
+def update_product(conn, itemcode, name, price, quantity, date):
     query = """ UPDATE products
                 SET name = %s
                 WHERE itemcode = %s """  # 테이블명 및 컬럼명 변경
-    data = (title, book_id)
+    data = (itemcode, name, price, quantity, date)
     affected_rows = 0 
     with conn.cursor() as cursor:
         cursor.execute(query, data)
@@ -55,32 +53,39 @@ def update_book(conn, book_id, title):
     conn.commit()
     return affected_rows 
 
-def delete_book(conn, book_id):
+def delete_product(conn, itemcode, name, price, quantity, date):
     query = "DELETE FROM products WHERE itemcode = %s"  # 테이블명 및 컬럼명 변경
-    data = (book_id, ) 
+    data = (itemcode, ) 
     affected_rows = 0  
     with conn.cursor() as cursor:
         cursor.execute(query, data)
+        affected_rows = cursor.rowcount  # 삭제된 행 수 저장
     conn.commit()
     return affected_rows  
 
 if __name__ == '__main__':
-    print(__name__)
-    print(read_config())
     conn = connect()
-    query_with_fetchall(conn)
-    conn.close()
+    if conn:
+        print("=== 현재 상품 목록 ===")
+        query_with_fetchall(conn)
 
-if __name__ == '__main__':
-    query_with_fetchall(conn)
-    title_name = input("상품명을 입력하세요 >>> ")  # 책제목 → 상품명
-    itemcode = input("상품 코드 입력 >>> ")  # ISBN → itemcode
-    insert_book(conn, title_name, itemcode)
-    query_with_fetchall(conn)
-    conn.close()
+        print("\n=== 상품 추가 ===")
+        title_name = input("상품명을 입력하세요 >>> ")  
+        itemcode = input("상품 코드 입력 >>> ")  
+        insert_product(conn, title_name, itemcode)
+        query_with_fetchall(conn)
 
-if __name__ == '__main__':
-    itemcode = input("업데이트할 상품의 코드(itemcode)를 입력하세요 >>> ")
-    new_name = input("상품의 새로운 이름을 입력하세요 >>> ")
-    affected_rows = update_book(conn, itemcode, new_name)
-    print(f'Number of affected rows: {af
+        print("\n=== 상품 업데이트 ===")
+        itemcode = input("업데이트할 상품의 코드(itemcode)를 입력하세요 >>> ")
+        new_name = input("상품의 새로운 이름을 입력하세요 >>> ")
+        affected_rows = update_product(conn, itemcode, new_name)
+        print(f'Number of affected rows: {affected_rows}')
+        query_with_fetchall(conn)
+
+        print("\n=== 상품 삭제 ===")
+        itemcode = input("삭제할 상품 코드(itemcode)를 입력하세요 >>> ")
+        affected_rows = delete_product(conn, itemcode)
+        print(f'Number of affected rows: {affected_rows}')
+        query_with_fetchall(conn)
+
+        conn.close()
