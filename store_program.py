@@ -128,7 +128,7 @@ while True:
 
     elif menu == '4': # 상품목록
         search_product02(products)
-        
+
     elif menu == '5':
         print('프로그램 종료')
         sys.exit()
