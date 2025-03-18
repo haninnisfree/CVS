@@ -1,37 +1,24 @@
 from mysql.connector import MySQLConnection, Error
 from config import read_config
 
-def delete_book(book_id):
-    # read database configuration
+def delete_product(itemcode):
     config = read_config()
-
-    # prepare query and data
-    query = "DELETE FROM books WHERE id = %s"
-
-    data = (book_id, ) 
-
-    affected_rows = 0  # Initialize the variable to store the number of affected rows
+    query = "DELETE FROM products WHERE itemcode = %s"
+    data = (itemcode) 
+    affected_rows = 0  
 
     try:
-        # connect to the database
         with MySQLConnection(**config) as conn:
-            # update book title
             with conn.cursor() as cursor:
                 cursor.execute(query, data)
-
-                # get the number of affected rows
                 affected_rows = cursor.rowcount
-
-            # accept the changes
             conn.commit()
-
     except Error as error:
         print(error)
 
-    return affected_rows  # Return the number of affected rows
+    return affected_rows  
 
 if __name__ == '__main__':
-    book_id = int(input("삭제할 책 번호를 입력하세요 >>> "))
-    affected_rows = delete_book(book_id)
+    itemcode = input("삭제할 상품 코드(itemcode)를 입력하세요 >>> ")  
+    affected_rows = delete_product(itemcode)
     print(f'Number of affected rows: {affected_rows}')
-
