@@ -5,7 +5,7 @@ conn = None
 try:
     conn = mysql.connector.Connect(host='localhost',
                                    port=3306,
-                                   database='pub',
+                                   database='store',
                                    user='user',
                                    password='password')
     if conn.is_connected():
