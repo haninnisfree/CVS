@@ -91,6 +91,27 @@ def edit_product_detail(edit_product):  # 상품 수정
     except ValueError:
         print("숫자를 입력해주세요.")
     
+def search_product02(products):  # 상품 검색
+    print("\n상품 목록")
+    search_name = input("검색할 상품명 (전체 목록은 Enter): ").strip().lower()
+    edit_product = []    
+    found = False 
+    
+    if search_name == "":  # 엔터만 누른 경우
+        for idx, product in enumerate(products, start=0):
+            edit_product.append(product)
+            print(f"[{idx}] {product['name']} - {product['itemcode']} - 가격: {product['price']} - 수량: {product['quantity']}")
+            found = True
+    else:  # 검색어가 있는 경우
+        for idx, product in enumerate(products, start=0):
+            if search_name in product['name'].lower():
+                edit_product.append(product)
+                print(f"[{idx}] {product['name']} - {product['itemcode']} - 가격: {product['price']} - 수량: {product['quantity']}")
+                found = True
+    
+    if not found:
+        print("해당 상품이 없습니다.")
+    
 
 while True:
     menu = input(display).strip()
@@ -104,8 +125,10 @@ while True:
 
     elif menu == '3': # 상품삭제
         pass
+
     elif menu == '4': # 상품목록
-        search_product(products)
+        search_product02(products)
+        
     elif menu == '5':
         print('프로그램 종료')
         sys.exit()
