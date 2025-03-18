@@ -1,8 +1,8 @@
 from flask import Flask,render_template,redirect
 from fetchall import query_with_fetchall
 from insertData import insert_book
-from updateData import update_book
-from deleteData import delete_book
+from updateData import update_product
+from deleteData import delete_product
 from config import read_config
 
 app = Flask(__name__)
@@ -12,20 +12,20 @@ def index():
   datas = query_with_fetchall()
   return render_template('list.html',datas=datas)
 
-@app.route('/insert/<title>/<isbn>')
-def insert(title,isbn):
-  insert_book(title, isbn)
+@app.route('/insert/<itemcode>/<name>/<price>/<quantity>/<date>')
+def insert(itemcode,name,price,quantity,date):
+  insert_book(itemcode,name,price,quantity,date)
   return redirect('/')
 
-@app.route('/update/<int:id>/<title>')
-def update(id,title):
-  affected_rows = update_book(id, title)
+@app.route('/update/<itemcode>/<name>')
+def update(itemcode,name):
+  affected_rows = update_book(itemcode, name)
   print(f'Number of affected rows: {affected_rows}')
   return redirect('/')
 
-@app.route('/delete/<int:id>')
-def delete(id):
-  affected_rows = delete_book(id)
+@app.route('/delete/<itemcode>')
+def delete(itemcode):
+  affected_rows = delete_book(itemcode)
   print(f'Number of affected rows: {affected_rows}')
   return redirect('/')
 
