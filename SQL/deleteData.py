@@ -4,7 +4,7 @@ from config import read_config
 def delete_product(itemcode):
     config = read_config()
     query = "DELETE FROM products WHERE itemcode = %s"
-    data = (itemcode) 
+    data = (itemcode,) 
     affected_rows = 0  
 
     try:

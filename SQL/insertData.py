@@ -1,11 +1,10 @@
 from mysql.connector import MySQLConnection, Error
 from config import read_config
 
-def insert_book(title, isbn):
-    query = "INSERT INTO products(name, itemcode) " \  # 테이블명 및 컬럼명 변경
-            "VALUES(%s,%s)"
+def insert_book(itemcode,name,price,quantity,date):
+    query = "INSERT INTO products (itemcode, name, price, quantity, date) VALUES (%s, %s, %s, %s, %s)"
 
-    args = (title, isbn)
+    args = (itemcode, name,price, quantity, date)
     product_id = None
     try:
         config = read_config()
@@ -19,6 +18,9 @@ def insert_book(title, isbn):
         print(error)
 
 if __name__ == '__main__':
-    title_name = input("상품명을 입력하세요 >>> ")  # 책제목 → 상품명
     itemcode = input("상품 코드 입력 >>> ")  # ISBN → itemcode
-    insert_book(title_name, itemcode)
+    name = input("상품명을 입력하세요 >>> ")
+    price = input("가격을 입력하세요 >>> ")
+    quantity = input("수량을 입력하세요 >>> ")
+    date = input("날짜를 입력하세요 >>> ")
+    insert_book(itemcode,name,price,quantity,date)
