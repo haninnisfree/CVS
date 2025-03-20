@@ -1,6 +1,8 @@
 import sys
 from mysql.connector import MySQLConnection, Error
 from configparser import ConfigParser
+import os
+os.chdir("C:/gitproject/pythonproject/CVS/SQL")
 
 # 데이터베이스 설정 불러오기
 def read_config(filename='app.ini', section='mysql'):    
